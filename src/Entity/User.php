@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
@@ -28,10 +29,21 @@ class User implements UserInterface
     private $roles = [];
 
     /**
+     * @Assert\NotBlank
+     * @Assert\Length(max=4096)
+     */
+    private $plainPassword;
+
+    /**
      * @var string The hashed password
      * @ORM\Column(type="string")
      */
     private $password;
+
+    public function __construct()
+    {
+        $this->roles = array('ROLE_USER');
+    }
 
     public function getId(): ?int
     {
@@ -77,6 +89,16 @@ class User implements UserInterface
         $this->roles = $roles;
 
         return $this;
+    }
+
+    public function getPlainPassword() 
+    {
+        return $this->plainPassword;
+    }
+
+    public function setPlainPassword(string $password) 
+    {
+        $this->plainPassword = $password;
     }
 
     /**
