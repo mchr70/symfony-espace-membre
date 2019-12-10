@@ -5,9 +5,11 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
+ * @UniqueEntity(fields="email", message="Cette adresse mail est déjà utilisée.")
  */
 class User implements UserInterface
 {
@@ -19,7 +21,11 @@ class User implements UserInterface
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=180, unique=true)
+     * @ORM\Column(type="string", length=255, unique=true)
+     * @Assert\NotBlank(
+     *      message="L'adresse mail ne peut pas être vide."
+     * )
+     * @Assert\Email()
      */
     private $email;
 
@@ -29,8 +35,15 @@ class User implements UserInterface
     private $roles = [];
 
     /**
-     * @Assert\NotBlank
-     * @Assert\Length(max=4096)
+     * @Assert\NotBlank(
+     *      message="Le mot de passe ne peut pas être vide."
+     * )
+     * @Assert\Length(
+     *      min = 8,
+     *      max = 15,
+     *      minMessage = "Votre mot de passe doit avoir au moins {{ limit }} caractères.",
+     *      maxMessage = "Votre mot de passe ne doit pas avoir plus de {{ limit }} caractères."
+     * )
      */
     private $plainPassword;
 

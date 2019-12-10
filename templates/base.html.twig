@@ -22,10 +22,10 @@
                             </li>
                         {% else %}
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ path('app_login') }}">Connexion</a>
+                                <a class="nav-link {% if app.request.attributes.get('_route') == 'app_login' %} active {% endif %}" href="{{ path('app_login') }}">Connexion</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ path('app_register') }}">Inscription</a>
+                                <a class="nav-link {% if app.request.attributes.get('_route') == 'app_register' %} active {% endif %}" href="{{ path('app_register') }}">Inscription</a>
                             </li>
                         {% endif %}
                     </ul>
@@ -33,9 +33,7 @@
             </nav>
         {% endblock %}
         {% block body %}
-            
-
-            <div class="container">
+            <div class="container mt-3">
         {% endblock %}
         {% block footer %}
             </div>
