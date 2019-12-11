@@ -17,12 +17,12 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Csrf\TokenGenerator\TokenGeneratorInterface;
 
 /**
- * @Route("/renouvellement-mot-de-passe")
+ * @Route("/reset_password")
  */
 class ResettingController extends AbstractController
 {
     /**
-     * @Route("/requete", name="request_resetting")
+     * @Route("/request", name="request_resetting")
      */
     public function request(Request $request, Mailer $mailer, TokenGeneratorInterface $tokenGenerator)
     {
