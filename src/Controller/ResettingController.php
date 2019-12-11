@@ -52,7 +52,7 @@ class ResettingController extends AbstractController
             // création du token
             $user->setToken($tokenGenerator->generateToken());
             // enregistrement de la date de création du token
-            $user->setPasswordRequestedAt(new \Datetime());
+            $user->setRequestedAt(new \Datetime());
             $em->flush();
 
             // on utilise le service Mailer créé précédemment
@@ -60,7 +60,7 @@ class ResettingController extends AbstractController
                 'user' => $user
             ]);
             $mailer->sendMessage('from@email.com', $user->getEmail(), 'renouvellement du mot de passe', $bodyMail);
-            $request->getSession()->getFlashBag()->add('success', "Un mail va vous être envoyé afin que vous puissiez renouveller votre mot de passe. Le lien que vous recevrez sera valide 24h.");
+            $request->getSession()->getFlashBag()->add('success', "Un mail va vous être envoyé afin que vous puissiez renouveller votre mot de passe. Le lien que vous recevrez sera valide 10 minutes.");
 
             return $this->redirectToRoute("app_login");
         }
@@ -72,15 +72,15 @@ class ResettingController extends AbstractController
 
     // si supérieur à 10min, retourne false
     // sinon retourne false
-    private function isRequestInTime(\Datetime $passwordRequestedAt = null)
+    private function isRequestInTime(\Datetime $requestedAt = null)
     {
-        if ($passwordRequestedAt === null)
+        if ($requestedAt === null)
         {
             return false;        
         }
         
         $now = new \DateTime();
-        $interval = $now->getTimestamp() - $passwordRequestedAt->getTimestamp();
+        $interval = $now->getTimestamp() - $requestedAt->getTimestamp();
 
         $daySeconds = 60 * 10;
         $response = $interval > $daySeconds ? false : $reponse = true;
@@ -96,7 +96,7 @@ class ResettingController extends AbstractController
         // le token associé au membre est null
         // le token enregistré en base et le token présent dans l'url ne sont pas égaux
         // le token date de plus de 10 minutes
-        if ($user->getToken() === null || $token !== $user->getToken() || !$this->isRequestInTime($user->getPasswordRequestedAt()))
+        if ($user->getToken() === null || $token !== $user->getToken() || !$this->isRequestInTime($user->getRequestedAt()))
         {
             throw new AccessDeniedHttpException();
         }
@@ -111,7 +111,7 @@ class ResettingController extends AbstractController
 
             // réinitialisation du token à null pour qu'il ne soit plus réutilisable
             $user->setToken(null);
-            $user->setPasswordRequestedAt(null);
+            $user->setRequestedAt(null);
 
             $em = $this->getDoctrine()->getManager();
             $em->persist($user);

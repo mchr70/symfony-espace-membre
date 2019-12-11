@@ -94,6 +94,8 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
             return new RedirectResponse($targetPath);
         }
 
+        $request->getSession()->getFlashBag()->add("success", "Test");
+
         return new RedirectResponse('/');
     }
 

@@ -57,7 +57,7 @@ class User implements UserInterface
      * @ORM\Column(type="datetime", nullable=true)
      * @var \DateTime
      */
-    private $passwordRequestedAt;
+    private $requestedAt;
 
     /**
     * @var string
@@ -145,17 +145,17 @@ class User implements UserInterface
     /*
      * Get passwordRequestedAt
      */
-    public function getPasswordRequestedAt()
+    public function getRequestedAt()
     {
-        return $this->passwordRequestedAt;
+        return $this->requestedAt;
     }
 
     /*
      * Set passwordRequestedAt
      */
-    public function setPasswordRequestedAt($passwordRequestedAt)
+    public function setRequestedAt($requestedAt)
     {
-        $this->passwordRequestedAt = $passwordRequestedAt;
+        $this->requestedAt = $requestedAt;
         return $this;
     }
 
