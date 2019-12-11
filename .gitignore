@@ -13,3 +13,7 @@
 .phpunit.result.cache
 /phpunit.xml
 ###< symfony/phpunit-bridge ###
+
+### The change made to a file
+### Example the .env environment file
+.env
